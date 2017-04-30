@@ -1,16 +1,16 @@
-/* 
-    This program is free software: you can redistribute it and/or modify 
-    it under the terms of the GNU General Public License as published by 
-    the Free Software Foundation, either version 3 of the License, or 
-    (at your option) any later version. 
- 
-    This program is distributed in the hope that it will be useful, 
-    but WITHOUT ANY WARRANTY; without even the implied warranty of 
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the 
-    GNU General Public License for more details. 
- 
-    You should have received a copy of the GNU General Public License 
-    along with this program.  If not, see <http://www.gnu.org/licenses/> 
+/*
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>
 */
 
 #include "BiDoubleGraph.h"
@@ -29,11 +29,12 @@ using namespace std;
 BiDoubleGraph::BiDoubleGraph(vector<vector<int>> adjacencyList)
 : m_AdjacencyList()
 , m_Stack()
+, m_iCurrentRound(0)
 ////, m_InStack(adjacencyList.size()*2, false)
 , m_Evaluated(adjacencyList.size()*2, -1)
 {
     m_Stack.reserve(adjacencyList.size()*2);
-    m_AdjacencyList = std::move(GraphTools::ComputeBiDoubleGraph(adjacencyList));
+    m_AdjacencyList = move(GraphTools::ComputeBiDoubleGraph(adjacencyList));
 }
 
 BiDoubleGraph::~BiDoubleGraph()
@@ -129,7 +130,7 @@ bool BiDoubleGraph::ComputeResidualPath(vector<int> const &vMatching, vector<int
         endVertex = vPreviousVertexOnPath[endVertex];
     }
 
-    std::reverse(vPath.begin(), vPath.end());
+    reverse(vPath.begin(), vPath.end());
 
     ////        cout << "Path through residual graph: ";
     ////        for (int const vertex : vPath) {
@@ -271,7 +272,7 @@ bool BiDoubleGraph::ComputeResidualPath(vector<int> const &vMatching, vector<int
         endVertex = vPreviousVertexOnPath[endVertex];
     }
 
-    std::reverse(vPath.begin(), vPath.end());
+    reverse(vPath.begin(), vPath.end());
 
     ////        cout << "Path through residual graph: ";
     ////        for (int const vertex : vPath) {
