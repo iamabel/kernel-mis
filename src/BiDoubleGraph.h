@@ -1,16 +1,16 @@
-/* 
-    This program is free software: you can redistribute it and/or modify 
-    it under the terms of the GNU General Public License as published by 
-    the Free Software Foundation, either version 3 of the License, or 
-    (at your option) any later version. 
- 
-    This program is distributed in the hope that it will be useful, 
-    but WITHOUT ANY WARRANTY; without even the implied warranty of 
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the 
-    GNU General Public License for more details. 
- 
-    You should have received a copy of the GNU General Public License 
-    along with this program.  If not, see <http://www.gnu.org/licenses/> 
+/*
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>
 */
 
 #ifndef _BI_DOUBLE_GRAPH_H_
@@ -32,6 +32,8 @@ public:
 
     bool ComputeResidualPath(std::vector<int> const &vMatching, std::vector<int> &vPath);
 
+    bool ComputeResidualPathBFS(std::vector<int> const &vMatching, std::vector<int> &vPath); // TODO(iamabel): clean up, depricate
+
     void ComputeMaximumMatching(std::vector<int> &vMatching);
 
     bool ComputeResidualPath(std::vector<int> const &vMatching, std::vector<int> &vPath, std::vector<bool> const &vInGraph, std::set<int> const &setInGraph);
@@ -43,10 +45,13 @@ public:
 private:
     void PushOnStack(int const vertex);
     int  PopOffStack();
+    void Enqueue(int const vertex);
+    int  Dequeue();
     bool IsEvaluated(int const vertex) const;
 
     std::vector<std::vector<int>> m_AdjacencyList;
     std::vector<int> m_Stack;
+    std::queue<int> m_Queue;
     std::vector<int> m_Evaluated;
     int m_iCurrentRound;
 };
