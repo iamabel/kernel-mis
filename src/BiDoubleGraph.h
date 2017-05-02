@@ -16,6 +16,7 @@
 #ifndef _BI_DOUBLE_GRAPH_H_
 #define _BI_DOUBLE_GRAPH_H_
 
+#include <queue>
 #include <vector>
 #include <set>
 #include <cstddef>

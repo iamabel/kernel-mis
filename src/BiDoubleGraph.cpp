@@ -186,22 +186,22 @@ void BiDoubleGraph::ComputeMaximumMatching(vector<int> &vMatching)
 
 // TODO(iamabel): Seems as though this verify def is copied twice, figure out if necessary
 
-// #ifdef VERIFY
-//     bool bVerified(true);
-//     for (int vertex = 0; vertex < vMatching.size(); ++vertex) {
-//         if (vMatching[vertex] != UNMATCHED_VERTEX) {
-//             if (vMatching[vMatching[vertex]] != vertex) {
-//                 cout << "ERROR! mismatch: " << vertex << " -> " << vMatching[vertex] << " -> " << vMatching[vMatching[vertex]] << endl << flush;
-//                 bVerified = false;
-//                 break;
-//             }
-//         }
-//     }
-//
-//
-//     cout << "Verification of matching " << (bVerified ? "passed!" : "failed!") << endl << flush;
-// #endif // VERIFY
-// }
+#ifdef VERIFY
+    bool bVerified(true);
+    for (int vertex = 0; vertex < vMatching.size(); ++vertex) {
+        if (vMatching[vertex] != UNMATCHED_VERTEX) {
+            if (vMatching[vMatching[vertex]] != vertex) {
+                cout << "ERROR! mismatch: " << vertex << " -> " << vMatching[vertex] << " -> " << vMatching[vMatching[vertex]] << endl << flush;
+                bVerified = false;
+                break;
+            }
+        }
+    }
+
+
+    cout << "Verification of matching " << (bVerified ? "passed!" : "failed!") << endl << flush;
+#endif // VERIFY
+}
 
 
 //
