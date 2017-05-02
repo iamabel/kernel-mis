@@ -364,7 +364,7 @@ int BiDoubleGraph::Dequeue()
 bool BiDoubleGraph::ComputeResidualPathBFS(vector<int> const &vMatching, vector<int> &vPath)
 {
     vPath.clear();
-    m_Stack.clear();
+    m_Queue.empty();
     m_iCurrentRound++;
     if (m_iCurrentRound == 0) {
         m_Evaluated.clear(); m_Evaluated.resize(m_AdjacencyList.size(), -1);
@@ -386,7 +386,7 @@ bool BiDoubleGraph::ComputeResidualPathBFS(vector<int> const &vMatching, vector<
 
     bool foundPath(false);
     while (!m_Stack.empty() && !foundPath) {
-        int const vertex = PopOffStack();
+        int const vertex = Dequeue();
         for (int const neighbor : m_AdjacencyList[vertex]) {
             // evaluate neighbor if the edge to that neighbor has residual capacity.
             if (IsEvaluated(neighbor)) continue;
@@ -394,7 +394,7 @@ bool BiDoubleGraph::ComputeResidualPathBFS(vector<int> const &vMatching, vector<
             // forward edge with residual capacity
             if (InLeftSide(vertex) && vMatching[vertex] != neighbor) {
                 vPreviousVertexOnPath[neighbor] = vertex;
-                PushOnStack(neighbor);
+                Enqueue(neighbor);
 
                 if (!InLeftSide(neighbor) && vMatching[neighbor] == UNMATCHED_VERTEX) { //found path
                     foundPath = true;
@@ -406,7 +406,7 @@ bool BiDoubleGraph::ComputeResidualPathBFS(vector<int> const &vMatching, vector<
             // backward edge that we can "undo" by pushing flow back...
             else if (InLeftSide(neighbor) && vMatching[neighbor] == vertex) {
                 vPreviousVertexOnPath[neighbor] = vertex;
-                PushOnStack(neighbor);
+                Enqueue(neighbor);
             }
         }
     }
