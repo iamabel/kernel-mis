@@ -1,16 +1,16 @@
-/* 
-    This program is free software: you can redistribute it and/or modify 
-    it under the terms of the GNU General Public License as published by 
-    the Free Software Foundation, either version 3 of the License, or 
-    (at your option) any later version. 
- 
-    This program is distributed in the hope that it will be useful, 
-    but WITHOUT ANY WARRANTY; without even the implied warranty of 
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the 
-    GNU General Public License for more details. 
- 
-    You should have received a copy of the GNU General Public License 
-    along with this program.  If not, see <http://www.gnu.org/licenses/> 
+/*
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>
 */
 
 // local includes
@@ -182,14 +182,23 @@ set<int> CliqueTools::ComputeCriticalIndependentSet(vector<vector<int>> const &a
     clock_t start_time2(clock());
     set<int> const criticalSet2(std::move(MatchingTools::ComputeCriticalSet(adjacencyList)));
     clock_t end_time2(clock());
+    clock_t start_time3(clock());
+    set<int> const criticalSet3(std::move(MatchingTools::ComputeCriticalSetBFS(adjacencyList)));
+    clock_t end_time3(clock());
     cout << "Critical           set 2 found: " << criticalSet2.size() << endl << flush;
     cout << "Time to compute critical set 2: " << Tools::GetTimeInSeconds(end_time2 - start_time2) << endl << flush;
 
-    if (criticalSet.size() != criticalSet2.size()) {
+    cout << "Critical           set 3 found: " << criticalSet3.size() << endl << flush;
+    cout << "Time to compute critical set 3: " << Tools::GetTimeInSeconds(end_time3 - start_time3) << endl << flush;
+
+    if ((criticalSet.size() != criticalSet2.size()) || (criticalSet.size() != criticalSet3.size())) {
         cout << "ERROR! Critical sets are different!" << endl << flush;
     }
     for (int const vertex : criticalSet) {
         if (criticalSet2.find(vertex) == criticalSet2.end()) {
+            cout << "ERROR! Critical set 2 does not contain " << vertex << "!" << endl << flush;
+        }
+        if (criticalSet3.find(vertex) == criticalSet3.end()) {
             cout << "ERROR! Critical set 2 does not contain " << vertex << "!" << endl << flush;
         }
     }
@@ -291,7 +300,7 @@ set<int> CliqueTools::IterativelyRemoveCriticalIndependentSets(vector<vector<int
         GraphTools::PrintGraphInSNAPFormat(biDoubleSubgraph);
         cout << "---End   BiDouble Subgraph---" << endl << flush;
 #endif // DEBUG
-        
+
         previousGraphSize = newGraphSize;
         set<int> criticalSet(std::move(MatchingTools::ComputeLeftMISOptimizedWithMatching(biDouble, matching, vInBiDoubleGraph, setRemainingBiDoubleVertices)));
 ////        cout << "Critical          set found: " << criticalSet.size() << endl << flush;
@@ -434,7 +443,7 @@ set<int> CliqueTools::IterativelyRemoveMaximumCriticalIndependentSets(vector<vec
         GraphTools::PrintGraphInSNAPFormat(biDoubleSubgraph);
         cout << "---End   BiDouble Subgraph---" << endl << flush;
 #endif // DEBUG
-        
+
         previousGraphSize = newGraphSize;
 
         set<int> maximumCriticalIndependentSet;
@@ -661,7 +670,7 @@ set<int> CliqueTools::ComputeMaximumCriticalIndependentSet(vector<vector<int>> c
         GraphTools::PrintGraphInSNAPFormat(biDoubleSubgraph);
         cout << "---End   BiDouble Subgraph---" << endl << flush;
 #endif // DEBUG
-        
+
         previousGraphSize = newGraphSize;
 
         vector<int> maximumCriticalIndependentSet;
@@ -713,7 +722,7 @@ set<int> CliqueTools::ComputeMaximumCriticalIndependentSet(vector<vector<int>> c
             set<int> const newCriticalSet(std::move(MatchingTools::ComputeBiDoubleMIS(biDoubleNew))); ////, inGraphNew, setNew)));
 #else
 
-            
+
             setBiDoubleVertices.erase(setBiDoubleVertices.find(vertex));
             setBiDoubleVertices.erase(setBiDoubleVertices.find(vertex + adjacencyList.size()));
             inBiDoubleGraph[vertex] = false;
@@ -776,7 +785,7 @@ set<int> CliqueTools::ComputeMaximumCriticalIndependentSet(vector<vector<int>> c
                 inBiDoubleGraph[neighbor] = true;
                 inBiDoubleGraph[neighbor + adjacencyList.size()] = true;
             }
-            
+
 #endif // 0
 
             bool const addToIndependentSet(criticalSet.size() == (newCriticalSet.size() + 2));
@@ -894,4 +903,3 @@ set<int> CliqueTools::ComputeMaximumCriticalIndependentSet(vector<vector<int>> c
 
     return setRemainingVertices;
 }
-

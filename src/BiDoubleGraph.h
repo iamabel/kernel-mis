@@ -33,13 +33,15 @@ public:
 
     bool ComputeResidualPath(std::vector<int> const &vMatching, std::vector<int> &vPath);
 
-    bool ComputeResidualPathBFS(std::vector<int> const &vMatching, std::vector<int> &vPath); // TODO(iamabel): clean up, depricate
-
     void ComputeMaximumMatching(std::vector<int> &vMatching);
 
     bool ComputeResidualPath(std::vector<int> const &vMatching, std::vector<int> &vPath, std::vector<bool> const &vInGraph, std::set<int> const &setInGraph);
 
     void ComputeMaximumMatching(std::vector<int> &vMatching, std::vector<bool> const &vInGraph, std::set<int> const &setInGraph);
+
+    bool ComputeResidualPathBFS(std::vector<int> const &vMatching, std::vector<int> &vPath); // TODO(iamabel): clean up, depricate
+
+    void ComputeMaximumMatchingBFS(std::vector<int> &vMatching);
 
     size_t Size() const { return m_AdjacencyList.size(); }
 

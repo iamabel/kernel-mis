@@ -385,7 +385,7 @@ bool BiDoubleGraph::ComputeResidualPathBFS(vector<int> const &vMatching, vector<
     int endVertex(UNMATCHED_VERTEX);
 
     bool foundPath(false);
-    while (!m_Stack.empty() && !foundPath) {
+    while (!m_Queue.empty() && !foundPath) {
         int const vertex = Dequeue();
         for (int const neighbor : m_AdjacencyList[vertex]) {
             // evaluate neighbor if the edge to that neighbor has residual capacity.
@@ -420,4 +420,56 @@ bool BiDoubleGraph::ComputeResidualPathBFS(vector<int> const &vMatching, vector<
 
     reverse(vPath.begin(), vPath.end());
     return true;
+}
+
+void BiDoubleGraph::ComputeMaximumMatchingBFS(vector<int> &vMatching)
+{
+    vector<int> path;
+    path.reserve(vMatching.size());
+    ComputeResidualPath(vMatching, path);
+    size_t iterations(0);
+    while (!path.empty()) {
+        iterations++;
+////        cout << "Found path of length " << path.size() << ", iteration: " << iterations << endl << flush;
+        for (size_t index = 1; index < path.size(); ++index) {
+            int const vertex1(path[index-1]);
+            int const vertex2(path[index]);
+            bool const backwardEdge(vertex1 > vertex2);
+            if (backwardEdge) {
+                vMatching[vertex1] = UNMATCHED_VERTEX;
+                vMatching[vertex2] = UNMATCHED_VERTEX;
+            }
+
+        }
+
+        for (size_t index = 1; index < path.size(); ++index) {
+            int const vertex1(path[index-1]);
+            int const vertex2(path[index]);
+            bool const forwardEdge(vertex1 < vertex2);
+            if (forwardEdge) {
+                vMatching[vertex1] = vertex2;
+                vMatching[vertex2] = vertex1;
+
+////                cout << "Add    forward  edge " << vertex1 << "->" << vertex2 << " to   vMatching" << endl << flush;
+            }
+        }
+
+        ComputeResidualPath(vMatching, path);
+    }
+
+#ifdef VERIFY
+    bool bVerified(true);
+    for (int vertex = 0; vertex < vMatching.size(); ++vertex) {
+        if (vMatching[vertex] != UNMATCHED_VERTEX) {
+            if (vMatching[vMatching[vertex]] != vertex) {
+                cout << "ERROR! mismatch: " << vertex << " -> " << vMatching[vertex] << " -> " << vMatching[vMatching[vertex]] << endl << flush;
+                bVerified = false;
+                break;
+            }
+        }
+    }
+
+
+    cout << "Verification of matching " << (bVerified ? "passed!" : "failed!") << endl << flush;
+#endif // VERIFY
 }

@@ -1,16 +1,16 @@
-/* 
-    This program is free software: you can redistribute it and/or modify 
-    it under the terms of the GNU General Public License as published by 
-    the Free Software Foundation, either version 3 of the License, or 
-    (at your option) any later version. 
- 
-    This program is distributed in the hope that it will be useful, 
-    but WITHOUT ANY WARRANTY; without even the implied warranty of 
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the 
-    GNU General Public License for more details. 
- 
-    You should have received a copy of the GNU General Public License 
-    along with this program.  If not, see <http://www.gnu.org/licenses/> 
+/*
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>
 */
 
 #include "MatchingTools.h"
@@ -183,9 +183,9 @@ set<int> MatchingTools::ComputeBiDoubleMIS(vector<vector<int>> const &biDoubleGr
     vector<int> previousVertex(matching.size(), -1);
 
 
-    // TODO/DS: Check that lambda works 
+    // TODO/DS: Check that lambda works
     auto isMatchedEdge = [&matching] (int const vertex, int const neighbor) {
-        return matching[neighbor] == vertex; 
+        return matching[neighbor] == vertex;
     };
 
     int coverVertexCount(0);
@@ -206,7 +206,7 @@ set<int> MatchingTools::ComputeBiDoubleMIS(vector<vector<int>> const &biDoubleGr
 ////                }
             }
         } else {
-           matchedVertices.push_back(vertex); 
+           matchedVertices.push_back(vertex);
         }
     }
 
@@ -507,9 +507,9 @@ set<int> MatchingTools::ComputeLeftMIS(vector<vector<int>> const &biDoubleGraph)
     vector<int> previousVertex(matching.size(), -1);
 
 
-    // TODO/DS: Check that lambda works 
+    // TODO/DS: Check that lambda works
     auto isMatchedEdge = [&matching] (int const vertex, int const neighbor) {
-        return matching[neighbor] == vertex; 
+        return matching[neighbor] == vertex;
     };
 
     int coverVertexCount(0);
@@ -530,7 +530,7 @@ set<int> MatchingTools::ComputeLeftMIS(vector<vector<int>> const &biDoubleGraph)
 ////                }
             }
         } else {
-           matchedVertices.push_back(vertex); 
+           matchedVertices.push_back(vertex);
         }
     }
 
@@ -682,7 +682,7 @@ void MatchingTools::ComputeAlternatingPaths(BiDoubleGraph const &biDouble, vecto
     vector<int> previousVertex(vMatching.size(), -1);
 
     auto isMatchedEdge = [&vMatching] (int const vertex, int const neighbor) {
-        return vMatching[neighbor] == vertex; 
+        return vMatching[neighbor] == vertex;
     };
 
     int coverVertexCount(0);
@@ -703,7 +703,7 @@ void MatchingTools::ComputeAlternatingPaths(BiDoubleGraph const &biDouble, vecto
 ////                }
             }
         } else {
-           matchedVertices.push_back(vertex); 
+           matchedVertices.push_back(vertex);
         }
     }
 
@@ -769,7 +769,7 @@ void MatchingTools::ComputeAlternatingPaths(BiDoubleGraph const &biDouble, vecto
 void MatchingTools::ComputeAlternatingPathsOptimized(BiDoubleGraph const &biDouble, vector<int> const &vMatching, vector<MatchingTools::LastEdge> &vOnAlternatingPath)
 {
     auto isMatchedEdge = [&vMatching] (int const vertex, int const neighbor) {
-        return vMatching[neighbor] == vertex; 
+        return vMatching[neighbor] == vertex;
     };
 
     vector<bool> vEvaluated(vMatching.size(), false);
@@ -1034,7 +1034,7 @@ set<int> MatchingTools::ComputeBiDoubleMIS(vector<vector<int>> const &biDoubleGr
     vector<int> previousVertex(matching.size(), -1);
 
     auto isMatchedEdge = [&matching] (int const vertex, int const neighbor) {
-        return matching[neighbor] == vertex; 
+        return matching[neighbor] == vertex;
     };
 
     int coverVertexCount(0);
@@ -1057,7 +1057,7 @@ set<int> MatchingTools::ComputeBiDoubleMIS(vector<vector<int>> const &biDoubleGr
 ////                }
             }
         } else {
-           matchedVertices.push_back(vertex); 
+           matchedVertices.push_back(vertex);
         }
     }
 
@@ -1190,8 +1190,8 @@ set<int> MatchingTools::ComputeBiDoubleMIS(vector<vector<int>> const &biDoubleGr
 #endif // VERIFY
 
 
-////    cout << "Graph Vertices: " << setInGraph.size() << endl << flush;          
-////    cout << "Match Vertices: " << matchVertices << endl << flush;          
+////    cout << "Graph Vertices: " << setInGraph.size() << endl << flush;
+////    cout << "Match Vertices: " << matchVertices << endl << flush;
 ////    cout << "MVC   Vertices: " << numMVCVertices << endl << flush;
 ////    cout << "MIS   Vertices: " << misToReturn.size() << endl << flush;
 
@@ -1222,7 +1222,7 @@ set<int> MatchingTools::ComputeLeftMIS(vector<vector<int>> const &biDoubleGraph,
 void MatchingTools::ComputeAlternatingPathsOptimized(BiDoubleGraph const &biDouble, vector<int> const &vMatching, vector<MatchingTools::LastEdge> &vOnAlternatingPath, vector<bool> const &vInGraph, set<int> const &setInGraph)
 {
     auto isMatchedEdge = [&vMatching] (int const vertex, int const neighbor) {
-        return vMatching[neighbor] == vertex; 
+        return vMatching[neighbor] == vertex;
     };
 
     auto inGraph = [&vInGraph] (int const vertex) {
@@ -1407,4 +1407,40 @@ set<int> MatchingTools::ComputeLeftMISOptimizedWithMatching(BiDoubleGraph &biDou
     }
 
     return mis;
+}
+
+set<int> MatchingTools::ComputeCriticalSetBFS(vector<vector<int>> const &adjacencyList)
+{
+    // each edge in matching is indexed by first vertex, and contains the second vertex
+    // initially there are no edges in matching (thus invalid second vertex in matching).
+    vector<int> matching(adjacencyList.size()*2, UNMATCHED_VERTEX);
+
+    cout << "Computing critical set..." << endl << flush;
+
+    BiDoubleGraph biDouble(adjacencyList);
+    biDouble.ComputeMaximumMatchingBFS(matching);
+
+    // TODO/DS: Make more efficient. Stop search when after marking a vertex in each matchings.
+    // i.e., number of vertices marked = number of matchings.
+    vector<LastEdge> vOnAlternatingPath(matching.size(), MatchingTools::LastEdge::NO_LAST_EDGE);
+
+    ComputeAlternatingPathsOptimized(biDouble, matching, vOnAlternatingPath);
+
+    set<int> misToReturn;
+
+    misToReturn = std::move(GetLeftVerticesOnAlternatingPaths(biDouble, matching, vOnAlternatingPath));
+
+    int matchVertices(0);
+    for (int const vertex : matching) {
+        if (vertex != UNMATCHED_VERTEX) {
+            matchVertices++;
+        }
+    }
+
+    matchVertices >>= 1;
+
+    cout << "MIS             Vertices: " << misToReturn.size() << endl << flush;
+    cout << "Match           Vertices: " << matchVertices << endl << flush;
+
+    return misToReturn;
 }
