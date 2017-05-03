@@ -1,16 +1,16 @@
-/* 
-    This program is free software: you can redistribute it and/or modify 
-    it under the terms of the GNU General Public License as published by 
-    the Free Software Foundation, either version 3 of the License, or 
-    (at your option) any later version. 
- 
-    This program is distributed in the hope that it will be useful, 
-    but WITHOUT ANY WARRANTY; without even the implied warranty of 
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the 
-    GNU General Public License for more details. 
- 
-    You should have received a copy of the GNU General Public License 
-    along with this program.  If not, see <http://www.gnu.org/licenses/> 
+/*
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>
 */
 
 #include "Experiments.h"
@@ -20,9 +20,12 @@
 #include "GraphTools.h"
 #include "Tools.h"
 #include "CliqueTools.h"
+#include "BiDoubleGraph.h"
 
 #include <list>
 #include <cstdlib>
+
+#define UNMATCHED_VERTEX -1
 
 using namespace std;
 
@@ -144,7 +147,7 @@ void Experiments::KernelizeAndRunComponentWiseMISS() const
             vAdjacencyMatrix[newVertex].resize(vComponent.size(), 0);
             for (int const neighbor : isolates.Neighbors()[oldVertex]) {
                 if (vertexRemap.find(neighbor) != vertexRemap.end()) {
-                    //cout << "newVertex           =" << newVertex << endl; 
+                    //cout << "newVertex           =" << newVertex << endl;
                     vAdjacencyMatrix[newVertex][vertexRemap[neighbor]] = 1;
                 }
             }
@@ -229,7 +232,7 @@ void Experiments::RunComponentsMISS() const
 
         clock_t newTime(clock());
         LightWeightFullMISS algorithm(componentAdjacencyMatrix);
-        algorithm.SetQuiet(false); 
+        algorithm.SetQuiet(false);
             ////        algorithm.SetOnlyVertex(vOrdering[splitPoint]);
         algorithm.SetTimeOutInSeconds(m_dTimeout);
         list<list<int>> cliques;
@@ -397,4 +400,35 @@ void Experiments::ComputeMaximumCriticalIndependentSet() const
     } else {
         cout << m_sDataSetName << "\t" << numVertices << "\t" << numEdges << "\t" << Tools::GetTimeInSeconds(endTime-startTime) << "\t" << independentVertices.size() << "\t" << remainingVertices.size() << endl << flush;
     }
+}
+
+void Experiments::ComputeMatchingComparison() const {
+  size_t size = m_AdjacencyArray.size()*2;
+  BiDoubleGraph biGraphNorm = BiDoubleGraph(m_AdjacencyArray);
+  BiDoubleGraph biGraphBFS = BiDoubleGraph(m_AdjacencyArray);
+
+  std::vector<int> vMatchingNorm(size, UNMATCHED_VERTEX);
+  int numMatchingNorm = 0;
+  std::vector<int> vMatchingBFS(size, UNMATCHED_VERTEX);
+  int numMatchingBFS = 0;
+
+  clock_t start_time1(clock());
+  biGraphNorm.ComputeMaximumMatching(vMatchingNorm);
+  clock_t end_time1(clock());
+
+  clock_t start_time2(clock());
+  biGraphBFS.ComputeMaximumMatchingBFS(vMatchingBFS);
+  clock_t end_time2(clock());
+
+
+  for (size_t index; index < size; index++) {
+    if (vMatchingNorm[index] != UNMATCHED_VERTEX) {
+      numMatchingNorm++;
+    }
+    if (vMatchingBFS[index] != UNMATCHED_VERTEX) {
+      numMatchingBFS++;
+    }
+  }
+  cout << ((numMatchingBFS == numMatchingNorm)? "Success, matching sets of same size":"ERROR: different matchings")  << endl << flush;
+  cout << "Normal running time: " << end_time1-start_time1 << endl << "BFS running time: " << end_time2 - start_time2 << endl << flush;
 }

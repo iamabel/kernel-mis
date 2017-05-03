@@ -137,8 +137,8 @@ void RunExperiment(string const &sInputFile, string const &sExperimentName, bool
         experiments.ComputeMaximumCriticalIndependentSet();
     } else if (sExperimentName=="simple-mcs") {
         experiments.KernelizeAndRunComponentWiseMISS();
-    } else if (sExperimentName=="size-critical-set") {
-      experiments.ComputeCriticalIndependentSet();
+    } else if (sExperimentName=="bfs-dfs-comparison") {
+        experiments.ComputeMatchingComparison();
     } else {
         cout << "ERROR: Invalid experiment name: " << sExperimentName << endl << flush;
         PrintUsageMessage();

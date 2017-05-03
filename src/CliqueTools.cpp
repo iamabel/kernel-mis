@@ -182,23 +182,14 @@ set<int> CliqueTools::ComputeCriticalIndependentSet(vector<vector<int>> const &a
     clock_t start_time2(clock());
     set<int> const criticalSet2(std::move(MatchingTools::ComputeCriticalSet(adjacencyList)));
     clock_t end_time2(clock());
-    clock_t start_time3(clock());
-    set<int> const criticalSet3(std::move(MatchingTools::ComputeCriticalSetBFS(adjacencyList)));
-    clock_t end_time3(clock());
     cout << "Critical           set 2 found: " << criticalSet2.size() << endl << flush;
     cout << "Time to compute critical set 2: " << Tools::GetTimeInSeconds(end_time2 - start_time2) << endl << flush;
 
-    cout << "Critical           set 3 found: " << criticalSet3.size() << endl << flush;
-    cout << "Time to compute critical set 3: " << Tools::GetTimeInSeconds(end_time3 - start_time3) << endl << flush;
-
-    if ((criticalSet.size() != criticalSet2.size()) || (criticalSet.size() != criticalSet3.size())) {
+    if (criticalSet.size() != criticalSet2.size()) {
         cout << "ERROR! Critical sets are different!" << endl << flush;
     }
     for (int const vertex : criticalSet) {
         if (criticalSet2.find(vertex) == criticalSet2.end()) {
-            cout << "ERROR! Critical set 2 does not contain " << vertex << "!" << endl << flush;
-        }
-        if (criticalSet3.find(vertex) == criticalSet3.end()) {
             cout << "ERROR! Critical set 2 does not contain " << vertex << "!" << endl << flush;
         }
     }

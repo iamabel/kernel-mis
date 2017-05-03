@@ -394,13 +394,13 @@ bool BiDoubleGraph::ComputeResidualPathBFS(vector<int> const &vMatching, vector<
             // forward edge with residual capacity
             if (InLeftSide(vertex) && vMatching[vertex] != neighbor) {
                 vPreviousVertexOnPath[neighbor] = vertex;
-                Enqueue(neighbor);
 
                 if (!InLeftSide(neighbor) && vMatching[neighbor] == UNMATCHED_VERTEX) { //found path
                     foundPath = true;
                     endVertex = neighbor;
                     break;
                 }
+                Enqueue(neighbor);
             }
 
             // backward edge that we can "undo" by pushing flow back...
@@ -424,6 +424,7 @@ bool BiDoubleGraph::ComputeResidualPathBFS(vector<int> const &vMatching, vector<
 
 void BiDoubleGraph::ComputeMaximumMatchingBFS(vector<int> &vMatching)
 {
+    m_iCurrentRound = 0;
     vector<int> path;
     path.reserve(vMatching.size());
     ComputeResidualPath(vMatching, path);
@@ -454,7 +455,7 @@ void BiDoubleGraph::ComputeMaximumMatchingBFS(vector<int> &vMatching)
             }
         }
 
-        ComputeResidualPath(vMatching, path);
+        ComputeResidualPathBFS(vMatching, path);
     }
 
 #ifdef VERIFY
